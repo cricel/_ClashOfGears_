@@ -8,12 +8,23 @@ public class Controller : MonoBehaviour
     RaycastHit hit;
     GameObject firstObj;
     GameObject secondObj;
+    
+    public GameObject mainCam;
 
     public Transform[] initTrans;
     public float[] values;
+    private bool testDriveCheck = false;
+
+    public float smoothSpeed = 0.125f;
+    public Vector3 offsetPos;
+    public Vector3 offsetRot;
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(transform.position);
+        Debug.Log(transform.rotation);
+        //initCam.transform.position = mainCam.transform.position;
+        //initCam.transform.rotation = mainCam.transform.rotation;
         initTrans = new Transform[5];
         int i = 0;
         foreach (Transform child in transform.Find("/Parts"))
@@ -70,8 +81,26 @@ public class Controller : MonoBehaviour
                 }
             }
         }
-        
+
+        if (testDriveCheck)
+        {
+            transform.Translate(Input.GetAxis("Horizontal") * Time.deltaTime, Input.GetAxis("Vertical") * Time.deltaTime, 0f);
+            Vector3 desiredPosition = transform.position + offsetPos;
+            //Vector3 desiredRotation = transform.rotation + offsetPos;
+            //Vector3 smoothedPosition = Vector3.Lerp(mainCam.transform.position, desiredPosition, smoothSpeed);
+            mainCam.transform.position = desiredPosition;
+            mainCam.transform.rotation = Quaternion.Euler(transform.eulerAngles.x + offsetRot.x, 
+                                                            transform.eulerAngles.y + offsetRot.y, 
+                                                            transform.eulerAngles.z + offsetRot.z);
+            Debug.Log(transform.eulerAngles.x + offsetRot.x);
+            //mainCam.transform.Rotate(transform.eulerAngles.x + offsetRot.x, transform.eulerAngles.y + offsetRot.y, transform.eulerAngles.z + offsetRot.z);
+        }   
     }
+
+    //void FixedUpdate()
+    //{
+        
+    //}
 
     public void ResetParts()
     {
@@ -84,6 +113,21 @@ public class Controller : MonoBehaviour
             child.localPosition = initTrans[i].localPosition;
             child.localRotation = initTrans[i].localRotation;
             i = i + 1;
+        }
+    }
+
+    public void testDrive()
+    {
+        testDriveCheck = !testDriveCheck;
+        Debug.Log("testDriveCheck " + testDriveCheck);
+        if (testDriveCheck == false)
+        {
+            mainCam.transform.position = new Vector3(-18.1f, 4.4f, 7.9f);
+            mainCam.transform.rotation = new Quaternion(0.0f, 1.0f, -0.1f, 0.2f);
+            transform.position = new Vector3(-18.1f, 1.3f, 0.3f);
+            //transform.rotation = new Quaternion(0.0f, 0.7f, 0.1f, 0.0f);
+            //Debug.Log(tempCam.position);
+            //Debug.Log(tempCam.rotation);
         }
     }
 }

@@ -11,9 +11,11 @@ public class UIFunctions : MonoBehaviour
     public GameObject menu_icon;
     public GameObject menuSelection;
     public GameObject DAI_input;
+    public GameObject ConferenceUI;
 
     private bool menuVisiable = false;
     private bool leaderboardVisiable = false;
+    private bool conferenceUIVisiable = false;
     private int DAI_number;
     public void MetamaskLogin()
     {
@@ -52,4 +54,9 @@ public class UIFunctions : MonoBehaviour
         leaderboard.SetActive(leaderboardVisiable);
     }
 
+    public void ConferenceUIFunction()
+    {
+        conferenceUIVisiable = !conferenceUIVisiable;
+        ConferenceUI.SetActive(conferenceUIVisiable);
+    }
 }
